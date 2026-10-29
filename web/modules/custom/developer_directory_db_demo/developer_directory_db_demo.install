@@ -1,0 +1,14 @@
+<?php
+
+function developer_directory_db_demo_schema(): array{
+    $schema = [];
+
+    $schema['developer_directory_db_demo_developer'] = [
+        'description' => 'Stores developer records',
+        'fields' => [
+            'id'
+        ]
+    ];
+
+    return [];
+}

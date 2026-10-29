@@ -1,0 +1,13 @@
+<article class="course-detail">
+
+  <div>
+    <h2>{{ 'Curso: @name'|t({'@name': name|default('')}) }}</h2>
+    
+    <p>{{ desc }}</p>
+    <p> <strong>Experience: </strong> {{ level }} </p>  
+    <p> {{ price|number_format(2, ',', '.') }} € </p>
+    <p><strong>Disponible: </strong> {{ (available_course|default(null))?"Sí":"No" }}</p>
+
+  </div>
+
+</article>

@@ -1,0 +1,5 @@
+name: Course Demo
+type: module
+description: 'Módulo utilizado durante el curso de Drupal 11.'
+package: Custom
+core_version_requirement: ^11

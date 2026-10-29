@@ -1,0 +1,81 @@
+courses.list:
+  path: '/courses'
+  defaults:
+    _title: 'Listado'
+    _controller: '\Drupal\courses\Controller\CoursesController::list'
+  requirements:
+    _permission: 'access content'
+
+courses.view:
+  path: '/courses/{name}'
+  defaults:
+    _title: 'Detalle'
+    _controller: '\Drupal\courses\Controller\CoursesController::view'
+  requirements:
+    _permission: 'access content'
+
+courses.search:
+  path: '/courses/search'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseSearchForm'
+    _title: 'Buscar cursos'
+  requirements:
+    _permission: 'access content'
+
+courses.search2:
+  path: '/courses/search2'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseSearchForm'
+    _title: 'Buscar cursos 2'
+  requirements:
+    _permission: 'access content'
+
+
+courses.registration:
+  path: '/courses/register'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseRegistrationForm'
+    _title: 'Registro de cursos'
+  requirements:
+    _permission: 'access content'
+
+courses.admin:
+  path: '/admin/config/courses'
+  defaults:
+    _title: 'Courses'
+    _controller: '\Drupal\courses\Controller\CoursesController::admin'
+  requirements:
+    _permission: 'administer courses'
+
+courses.add:
+  path: '/courses/add'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseForm'
+    _title: 'Añadir curso'
+  requirements:
+    _permission: 'administer courses'
+
+courses.edit:
+  path: '/courses/{curso}/edit'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseForm'
+    _title: 'Editar curso'
+  requirements:
+    _entity_access: 'curso.update'
+  options:
+    parameters:
+      curso:
+        type: entity:node
+
+courses.delete:
+  path: '/courses/{node}/delete'
+  defaults:
+    _form: '\Drupal\courses\Form\CourseDeleteForm'
+    _title: 'Eliminar curso'
+  requirements:
+    _entity_access: 'node.delete'
+    node: '\d+'
+  options:
+    parameters:
+      node:
+        type: entity:node

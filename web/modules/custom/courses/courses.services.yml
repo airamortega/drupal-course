@@ -1,0 +1,5 @@
+services:
+  courses.manager:
+    class: \Drupal\courses\Service\CourseManager
+    arguments:
+      - '@entity_type.manager'

@@ -1,0 +1,17 @@
+<div class="course-featured">
+  <h2>{{ title }}</h2>
+
+  {% if courses %}
+    <ul>
+      {% for course in courses %}
+        <li>
+          <a href="{{ course.url }}">
+            {{ course.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>{{ 'No hay cursos disponibles.'|t }}</p>
+  {% endif %}
+</div>

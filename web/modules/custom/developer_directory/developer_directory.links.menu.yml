@@ -1,0 +1,7 @@
+developer_directory.admin:
+  title: Configuración del directorio de desarrolladores
+  description: Controlor del directorio de desarrolladores.
+  parent: system.admin_config
+  route_name: developer_directory.admin
+  weight: 10
+

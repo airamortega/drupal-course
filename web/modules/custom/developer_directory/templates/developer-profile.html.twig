@@ -1,0 +1,22 @@
+<article class="developer-profile">
+    <h2>{{ name|upper }}</h2>
+    <p>
+        <strong> Bienvenido al directorio de desarrolladores </strong>
+    </p>
+    <p><strong>Bio: </strong> {{ bio }}  </p>
+
+    {% if portfolio_uri %}
+        <p><strong>Portfolio: </strong> <a href="{{portfolio_uri}}"> {{ portfolio_title|default('Ver portfolio') }} </a> </p>
+    {% endif %}
+    
+    <p><strong>Experiencia: </strong> {{ experience }}  </p>
+
+    {% include "@developer_directory/developer-skills.html.twig" %} 
+
+    <p><strong>Disponible: </strong> {{ (available|default(null))?"Sí":"No" }}  </p>
+
+    {% if available %}
+        <p><strong>Contacto: </strong> <a href="mailto:{{ email }}"> {{ email }} </a> </p>
+    {% endif %}
+
+</article>

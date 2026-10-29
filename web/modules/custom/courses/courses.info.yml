@@ -1,0 +1,5 @@
+name: 'Courses'
+type: module
+description: 'Gestión de cursos para aprender Drupal'
+package: Custom
+core_version_requirement: ^10 || ^11

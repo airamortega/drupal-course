@@ -1,0 +1,5 @@
+name: 'Developer Directory - Database API Demo'
+type: module
+description: 'Demostracion API'
+package: Custom
+core_version_requirement: ^10 || ^11

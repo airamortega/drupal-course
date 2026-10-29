@@ -1,0 +1,80 @@
+developer_directory.list:
+  path: '/developers'
+  defaults:
+    _title: 'Listado'
+    _controller: '\Drupal\developer_directory\Controller\DeveloperDirectoryController::list'
+  requirements:
+    _permission: 'access content'
+
+developer_directory.view:
+  path: '/developers/{name}'
+  defaults:
+    _title: 'Detalle'
+    _controller: '\Drupal\developer_directory\Controller\DeveloperDirectoryController::view'
+  requirements:
+    _permission: 'access content'
+
+developer_directory.search:
+  path: '/developers/search'
+  defaults:
+    _form: '\Drupal\developer_directory\Form\DeveloperSearchForm'
+    _title: 'Buscar desarrolladores'
+  requirements:
+    _permission: 'access content'
+
+developer_directory.search2:
+  path: '/developers/search2'
+  defaults:
+    _form: '\Drupal\developer_directory\Form\DeveloperSearchForm'
+    _title: 'Buscar desarrolladores'
+  requirements:
+    _permission: 'access content'
+
+developer_directory.registration:
+  path: '/developers/register'
+  defaults:
+    _form: '\Drupal\developer_directory\Form\DeveloperRegistrationForm'
+    _title: 'Registro de desarrolladores'
+  requirements:
+    _permission: 'access content'
+
+developer_directory.add:
+  path: '/developers/add'
+  defaults:
+    _form: '\Drupal\developer_directory\Form\DeveloperForm'
+    _title: 'Registro de desarrollador'
+  requirements:
+    _permission: 'administer developer directory'
+
+developer_directory.edit:
+  path: '/developers/{developer}/edit'
+  defaults:
+    _form: '\Drupal\developer_directory\Form\DeveloperForm'
+    _title: 'Editar desarrollador'
+  requirements:
+    _entity_access: 'developer.update'
+  options:
+    parameters:
+      developer:
+        type: entity:node
+
+developer_directory.delete:
+  path: '/developers/{node}/delete'
+  defaults:
+    _title: 'Eliminar desarrollador'
+    _form: '\Drupal\developer_directory\Form\DeveloperDeleteForm'
+  requirements:
+    _entity_access: 'node.delete'
+    node: '\d+'
+  options:
+    parameters:
+      developer:
+        type: entity:node
+
+developer_directory.admin:
+  path: '/admin/config/developer-directory'
+  defaults:
+    _title: 'Developer Directory'
+    _controller: '\Drupal\developer_directory\Controller\DeveloperDirectoryController::admin'
+  requirements:
+    _permission: 'administer developer directory'

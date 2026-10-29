@@ -1,0 +1,107 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * Implements hook_theme().
+ */
+function courses_theme($existing, $type, $theme, $path): array  {
+  return [
+    'course_detail' => [
+      'variables' => [
+        'name' => null,
+        'desc' => null,
+        'price' => null,
+        'level' => null,
+        'available_course' => null,
+      ],
+      'template' => 'course-detail',
+    ],
+    
+    'course_featured' => [
+      'variables' => [
+            'courses' => [],
+            'title' => NULL,
+        ],
+            'template' => 'course-featured',
+        ],
+  ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * 
+ * Altera el formulario de búsqueda
+ */
+function courses_form_developer_course_search_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+
+    if($route_name !== 'course.search'){
+        return;
+    }
+
+    $form['#validate'][] = 'course_extra_validate';
+
+    // Para añadir un procesamiento adicional
+    $form['#submit'][] = 'course_extra_submit';
+
+    // Modificamos el campo que ya existe del formulario
+    $form['name']['#title'] = t('Buscar cursos');
+
+    $form['name']['#description'] = t('Introduce al menos dos caracteres para realizar la búsqueda');
+
+    $form['name']['#attributes']['placeholder'] = t('Ej.: PHP');
+
+    $form['name']['#required'] = true;
+
+    $form['name']['#maxlength'] = 100;
+
+    $form['name']['#element_validate'][] = 'course_search_name_validate';
+
+    $form['search_help'] = [
+        '#type' => 'item',
+        '#title' => t('Consejo'),
+        '#markup' => t('Puedes buscar por el nombre completo o por una parte del nombre'),
+        '#weight' => -10,
+    ];
+
+    $form['actions']['submit']['#value'] = t('Buscar cursos');    
+}
+
+/**
+ * Validación especial para name en el formulario de búsqueda
+ */
+function course_search_name_validate(array &$element, FormStateInterface $form_state, array &$form): void{
+    $name = trim((string) $element['#value']);
+
+    if(mb_strlen($name) < 2){
+        $form_state->setError($element, t('Introduce al menos dos caracteres para buscar'));
+    }
+}
+
+function course_extra_validate(array &$form, FormStateInterface $form_state){
+    $name = trim((string) $form_state->getValue('name'));
+
+    if(str_contains($name, '@')){
+        $form_state->setErrorByName('name', t('La búsqueda no admite @.'));
+    }
+}
+
+function course_extra_submit(array &$form, FormStateInterface $form_state){
+    \Drupal::logger('course')->notice('Se ha realizado una búsqueda');
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function courses_views_data_alter(array &$data): void {
+
+  $data['node_field_data']['course_title_prefix'] = [
+    'title' => t('Curso: título comienza por una letra'),
+    'help' => t('Filtra los títulos según su letra inicial.'),
+    'filter' => [
+      'id' => 'course_title_prefix',
+    ],
+  ];
+}

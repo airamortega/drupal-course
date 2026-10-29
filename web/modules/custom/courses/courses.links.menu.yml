@@ -1,0 +1,6 @@
+courses.admin:
+  title: Configuración de los cursos
+  description: Controla la configuración de los cursos.
+  parent: system.admin_config
+  route_name: courses.admin
+  weight: 10

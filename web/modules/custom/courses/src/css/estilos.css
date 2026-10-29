@@ -1,0 +1,21 @@
+.level-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 0.4rem;
+  font-weight: 600;
+}
+
+.level-badge--junior {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.level-badge--mid {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.level-badge--senior {
+  background: #dcfce7;
+  color: #166534;
+}

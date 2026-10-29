@@ -1,0 +1,3 @@
+administer courses:
+  title: 'Administrar cursos'
+  description: 'Controla los permisos de los cursos'

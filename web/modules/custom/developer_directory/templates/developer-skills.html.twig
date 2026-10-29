@@ -1,0 +1,14 @@
+{% if skills is not empty %}
+
+    <h3>Tecnologías ({{ skills|length }}) </h3>
+
+    <ul>
+        {% for skill in skills %}
+        <li>{{ skill }}</li>
+        {% else %}
+        <li>No hay tecnologías especificadas</li>
+        {% endfor %}
+    </ul>
+
+{% endif %} 
+

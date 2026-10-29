@@ -1,0 +1,66 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * @file
+ * Implements hook_theme().
+ */
+function developer_directory_theme($existing, $type, $theme, $path): array  {
+  return [
+    'developer_profile' => [
+      'variables' => [
+        'name' => null,
+        'bio' => null,
+        'skills' => null,
+        'experience' => null,
+        'email' => null,
+        'available' => false,
+        'portfolio_title' => null,
+        'portfolio_uri' => null,
+      ],
+      'template' => 'developer-profile',
+    ],
+  ];
+}
+
+/**
+ * hook_form_FORM_ID_alter
+ */
+function developer_directory_form_developer_directory_search_form_alter(array &$form, FormStateInterface $form_state, string $form_id){
+  
+  $route_name = \Drupal::routeMatch()->getRouteName();
+
+  if($route_name !== 'developer_directory.search'){
+    return;
+  }
+
+  // Modificamos el campo que ya existe del formulario
+  $form['name']['#title'] = t('Buscas desarrolladores');
+  $form['name']['#description'] = t('Introduce al menos dos caracteres para realizar la busqueda.');
+  $form['name']['#attributes']['placeholder'] = t('Ej.: Ana');
+  $form['name']['#required'] = TRUE;
+  $form['name']['#maxlength'] = 100;
+  $form['name']['#element_validate'][] = 'developer_directory_search_name_validate';
+
+  $form['search_help'] = [
+    '#type' => 'item',
+    '#title' => t('Consejo'),
+    '#markup' => t('Puedes buscar por el nombre completo o por una parte del nombre.'),
+    '#weight' => -10,
+  ];
+
+  $form['actions']['submit']['#value'] = t('Buscar desarrolladores');
+
+}
+
+/**
+ * Validacion especial
+ */
+function developer_directory_search_name_validate(array &$element, FormStateInterface $form_state, array $form){
+  $name = trim((string) $element['#value']);
+
+  if(mb_strlen($name) < 2){
+    $form_state->setError($element, t('Introduce al menos dos caracteres para buscar.'));
+  }
+}
