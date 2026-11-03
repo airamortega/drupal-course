@@ -38,6 +38,9 @@ final class CoursesController extends ControllerBase {
 
         $courses = $this->courseManager->getCourses();
 
+        $config = $this->config('courses.settings');
+        $limit = $config->get('courses_per_page') ?? 10;
+
         $items = [];
         foreach($courses as $course){
             $items[] = [

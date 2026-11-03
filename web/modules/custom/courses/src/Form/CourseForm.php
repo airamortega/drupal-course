@@ -6,16 +6,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\courses\Service\CourseManager;
+use Drupal\courses\Service\CourseNotificationQueue;
 use Drupal\node\NodeInterface;
 use Override;
 
 class CourseForm extends FormBase {
 
-    public function __construct(protected CourseManager $courseManager)
+    public function __construct(protected CourseManager $courseManager, protected CourseNotificationQueue $courseNotificationQueue) 
     {}
 
     public static function create(ContainerInterface $container): static{
-        return new static($container->get('courses.manager'));
+        return new static(
+            $container->get('courses.manager'), 
+            $container->get('courses.notification_queue')
+        );
     }
 
     public function getFormId(): string
@@ -111,12 +115,14 @@ class CourseForm extends FormBase {
             }
 
             $course = $this->courseManager->updateCourse($course, $values);
+            $this->courseNotificationQueue->enqueue((int)$courseId, 'updated');
 
             $this->messenger()->addStatus($this->t('Se ha actualizado el curso @name.', ['@name' => $course->getTitle()]));
 
         }else{
             // Inserción
             $course = $this->courseManager->createCourse($values);
+            $this->courseNotificationQueue->enqueue((int)$courseId, 'created');
             $this->messenger()->addStatus($this->t('Se ha creado el curso @name.', ['@name' => $course->getTitle()]));
         }                
 

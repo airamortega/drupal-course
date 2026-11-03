@@ -27,6 +27,7 @@ class CourseManager{
             ->execute();
         
         return $storage->loadMultiple($ids);
+
     }
 
     public function getCourse(int $id): ?NodeInterface{
@@ -91,7 +92,7 @@ class CourseManager{
             'field_desc' => $values['desc'],
             'field_price' => $values['price'],
             'field_level' => $values['level'],
-            'field_available_course' => $values['available_course'],
+            'field_available_course' => $values['available_course'] ?? 0,
             'status' => 1,
         ]);
 

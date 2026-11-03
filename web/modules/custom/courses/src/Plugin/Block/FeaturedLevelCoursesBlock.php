@@ -28,7 +28,7 @@ class CoursesByLevelBlock extends BlockBase implements ContainerFactoryPluginInt
             $configuration,
             $plugin_id,
             $plugin_definition,
-            $container->get('course.manager'),
+            $container->get('courses.manager'),
         );
     }
 

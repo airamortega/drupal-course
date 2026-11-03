@@ -4,6 +4,7 @@ namespace Drupal\courses\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -11,13 +12,13 @@ use Drupal\courses\Service\CourseManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Displays a list of featured developers.
+ * Displays a list of featured courses.
  */
 #[Block(
   id: 'course_featured',
   admin_label: new TranslatableMarkup('Cursos destacados'),
 )]
-class FeaturedDevelopersBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class FeaturedCoursesBlock extends BlockBase implements ContainerFactoryPluginInterface {
   
   public function __construct(array $configuration, $plugin_id, $plugin_definition, protected CourseManager $courseManager,) {
         parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -28,7 +29,7 @@ class FeaturedDevelopersBlock extends BlockBase implements ContainerFactoryPlugi
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('course.manager'),
+      $container->get('courses.manager'),
     );
   }
 
@@ -44,7 +45,7 @@ class FeaturedDevelopersBlock extends BlockBase implements ContainerFactoryPlugi
     $form['number_of_course'] = [
       '#type' => 'number',
       '#title' => $this->t('Número de cursos'),
-      '#default_value' => $this->configuration['number_of_course'],
+      '#default_value' => $this->configuration['number_of_course'] ?? 5,
       '#min' => 1,
       '#max' => 20,
       '#required' => TRUE,
@@ -62,23 +63,40 @@ class FeaturedDevelopersBlock extends BlockBase implements ContainerFactoryPlugi
   public function build(): array {
     $courses = $this->courseManager->getCourses($this->configuration['number_of_course']);
 
+    $build = [
+      '#theme' => 'course_featured',
+      '#title' => $this->t('Cursos destacados'),
+      '#courses' => $courses,
+    ];
+
+    $cache = CacheableMetadata::createFromRenderArray($build);
+
+    foreach ($courses as $course) {
+      $cache->addCacheableDependency($course);
+    }
+
+    $cache->addCacheTags(['node_list']);
+    $cache->applyTo($build);
+
+    //return $build;
+
     $items = [];
 
     foreach ($courses as $course) {
       $items[] = [
-        '#type' => 'link',
-        '#title' => $course->getTitle(),
-        '#url' => $course->toUrl(),
+        'name' => $course->getTitle(),
+        'url' => $course->toUrl()->toString(),
       ];
     }
 
     return [
-      '#theme' => 'item_list',
+      '#theme' => 'course_featured',
       '#title' => $this->t('Cursos destacados'),
-      '#items' => $items,
+      '#courses' => $items,
       '#cache' => [
         'tags' => ['node_list'],
         'contexts' => ['user.permissions'],
+        'max-age' => 3600
       ],
     ];
   }

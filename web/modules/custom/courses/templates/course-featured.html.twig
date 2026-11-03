@@ -1,6 +1,8 @@
 <div class="course-featured">
   <h2>{{ title }}</h2>
 
+  <p>Número de cursos: {{ courses|length }}</p>
+
   {% if courses %}
     <ul>
       {% for course in courses %}
